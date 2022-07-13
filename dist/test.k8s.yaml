@@ -1,0 +1,56 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test-hello-world-pod-c82ee33b
+spec:
+  containers:
+    - image: myorg.com/hello-world:latest
+      name: hello
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: demo-app
+    applicationId: ap009999
+    logicalEnv: dit
+  name: test-service-c8372f6e
+spec:
+  ports:
+    - port: 80
+  selector:
+    app: demo-app
+    applicationId: ap009999
+    logicalEnv: dit
+  type: LoadBalancer
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: test-deployment-c84c12f6
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: demo-app
+      applicationId: ap009999
+      logicalEnv: dit
+  template:
+    metadata:
+      labels:
+        app: demo-app
+        applicationId: ap009999
+        logicalEnv: dit
+    spec:
+      containers:
+        - image: myorg.com/hello-world:latest
+          name: hellow-ctr
+          ports:
+            - containerPort: 80
+          resources:
+            limits:
+              cpu: 1500m
+              memory: 2000Mi
+            requests:
+              cpu: 0.2
+              memory: 400Mi
